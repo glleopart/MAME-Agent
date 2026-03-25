@@ -1,0 +1,19 @@
+{
+  "name": "mame",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MAME — MAterials for ME: AI-powered desktop agent for computational materials science",
+  "scripts": {
+    "dev:agent": "pnpm --filter @mame/agent dev",
+    "dev:desktop": "pnpm --filter @mame/desktop dev",
+    "build:agent": "pnpm --filter @mame/agent build",
+    "build:desktop": "pnpm --filter @mame/desktop build",
+    "clean": "pnpm -r exec rm -rf node_modules dist .build"
+  },
+  "engines": {
+    "node": ">=22.13.0",
+    "pnpm": ">=9.0.0"
+  },
+  "keywords": ["materials-science", "ai-agent", "dft", "mastra", "electron"],
+  "license": "MIT"
+}

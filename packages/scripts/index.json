@@ -1,0 +1,118 @@
+{
+  "version": "0.1.0",
+  "description": "MAME DFT script repository index",
+  "scripts": [
+    {
+      "id": "aims-scf",
+      "path": "Fhi-aims/scf",
+      "code": "fhi-aims",
+      "task": "scf",
+      "description": "Self-consistent field calculation with FHI-aims",
+      "status": "placeholder"
+    },
+    {
+      "id": "aims-relax",
+      "path": "Fhi-aims/relax",
+      "code": "fhi-aims",
+      "task": "geometry-optimization",
+      "description": "Geometry optimization (relaxation) with FHI-aims",
+      "status": "placeholder"
+    },
+    {
+      "id": "aims-bands",
+      "path": "Fhi-aims/bands",
+      "code": "fhi-aims",
+      "task": "band-structure",
+      "description": "Electronic band structure calculation with FHI-aims",
+      "status": "placeholder"
+    },
+    {
+      "id": "aims-dos",
+      "path": "Fhi-aims/dos",
+      "code": "fhi-aims",
+      "task": "dos",
+      "description": "Density of states calculation with FHI-aims",
+      "status": "placeholder"
+    },
+    {
+      "id": "qe-scf",
+      "path": "QE/scf",
+      "code": "quantum-espresso",
+      "task": "scf",
+      "description": "Self-consistent field calculation with Quantum ESPRESSO",
+      "status": "placeholder"
+    },
+    {
+      "id": "qe-nscf",
+      "path": "QE/nscf",
+      "code": "quantum-espresso",
+      "task": "nscf",
+      "description": "Non-self-consistent field calculation (prerequisite for bands/DOS)",
+      "status": "placeholder"
+    },
+    {
+      "id": "qe-relax",
+      "path": "QE/relax",
+      "code": "quantum-espresso",
+      "task": "geometry-optimization",
+      "description": "Fixed-cell geometry optimization with Quantum ESPRESSO",
+      "status": "placeholder"
+    },
+    {
+      "id": "qe-vc-relax",
+      "path": "QE/vc-relax",
+      "code": "quantum-espresso",
+      "task": "vc-relax",
+      "description": "Variable-cell relaxation with Quantum ESPRESSO",
+      "status": "placeholder"
+    },
+    {
+      "id": "qe-dos",
+      "path": "QE/dos",
+      "code": "quantum-espresso",
+      "task": "dos",
+      "description": "Density of states calculation with Quantum ESPRESSO (post-nscf)",
+      "status": "placeholder"
+    },
+    {
+      "id": "plot-bands",
+      "path": "Plotting/band_plot.py",
+      "code": "python",
+      "task": "plotting",
+      "description": "Band structure plotting script",
+      "status": "placeholder"
+    },
+    {
+      "id": "plot-dos",
+      "path": "Plotting/dos_plot.py",
+      "code": "python",
+      "task": "plotting",
+      "description": "Density of states plotting script",
+      "status": "placeholder"
+    },
+    {
+      "id": "plot-structure",
+      "path": "Plotting/structure_plot.py",
+      "code": "python",
+      "task": "plotting",
+      "description": "Crystal structure visualization script",
+      "status": "placeholder"
+    },
+    {
+      "id": "analysis-geometry",
+      "path": "Analysis/geometry_analysis.py",
+      "code": "python",
+      "task": "analysis",
+      "description": "Analysis of optimized geometry (bond lengths, angles, lattice parameters)",
+      "status": "placeholder"
+    },
+    {
+      "id": "analysis-magnetic",
+      "path": "Analysis/magnetic_analysis.py",
+      "code": "python",
+      "task": "analysis",
+      "description": "Analysis of magnetic solutions (spin moments, magnetic ordering)",
+      "status": "placeholder"
+    }
+  ]
+}

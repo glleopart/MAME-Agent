@@ -1,0 +1,9 @@
+{
+  "name": "@mame/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MAME desktop application (Electron + React) — Phase 7",
+  "scripts": {
+    "dev": "echo 'Desktop package will be configured in Phase 7'"
+  }
+}
