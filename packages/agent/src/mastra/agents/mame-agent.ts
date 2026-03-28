@@ -1,10 +1,12 @@
 import { Agent } from "@mastra/core/agent";
+import { memory } from "../memory";
 
 export const mameAgent = new Agent({
   id: "mame-agent",
   name: "MAME",
   description: "AI assistant for computational materials science at the nanoscale",
   model: "opencode-go/kimi-k2.5",
+  memory,
   instructions: `You are MAME (MAterials for ME), an AI assistant specialized in computational materials science at the nanoscale.
 
 Your expertise covers:
