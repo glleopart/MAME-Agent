@@ -6,14 +6,14 @@ AI-powered desktop agent for computational materials science.
 - Mastra v1 (TypeScript agent framework)
 - OpenCode GO / Kimi K2.5 (LLM provider)
 - LibSQL for storage/memory
-- Python MCP server for Materials Project API (Phase 2 — implemented)
+- Python MCP server for Materials Project API, web search, and script library (Phase 3 — implemented)
 - Electron + React (desktop, Phase 7)
 
 ## Structure
 - packages/agent/ — Mastra agent (main codebase)
 - packages/desktop/ — Electron app (Phase 7)
-- packages/mcp-server/ — Python MCP server (FastMCP + mp-api)
-- packages/scripts/ — DFT script repository
+- packages/mcp-server/ — Python MCP server (FastMCP + mp-api + duckduckgo-search + httpx)
+- packages/scripts/ — DFT input template library (FHI-aims and QE)
 
 ## Key files
 - packages/agent/src/mastra/index.ts — Mastra entry point
@@ -21,7 +21,23 @@ AI-powered desktop agent for computational materials science.
 - packages/agent/src/mastra/memory.ts — LibSQL persistent memory
 - packages/agent/src/mastra/mcp.ts — MCPClient wired to Python MCP server
 - packages/agent/.env — API keys (OPENCODE_API_KEY, MP_API_KEY)
-- packages/mcp-server/src/mame_mcp/server.py — MCP tools (search_materials, get_electronic_properties, get_structure, get_dos)
+- packages/mcp-server/src/mame_mcp/server.py — All MCP tools (8 total)
+- packages/scripts/index.json — Script library index
+
+## MCP tools (8 total)
+- search_materials — search Materials Project by formula
+- get_electronic_properties — band gap, VBM, CBM, magnetic ordering
+- get_structure — crystal structure (JSON or CIF)
+- get_dos — density of states
+- web_search — DuckDuckGo search for GGA+U values, methodology, papers
+- fetch_documentation — fetch and read any documentation/manual page URL
+- list_scripts — list local DFT input templates (filter by code or task)
+- get_script — return template file contents by ID
+
+## Script library (packages/scripts/)
+Ready templates: aims-scf, aims-relax, aims-bands, aims-dos,
+qe-scf, qe-nscf, qe-relax, qe-vc-relax, qe-dos
+All templates include inline comments and pre-commented GGA+U options.
 
 ## Commands
 - pnpm dev:agent — starts Mastra dev server at localhost:4111
@@ -34,7 +50,7 @@ runs bundled code from packages/agent/.mastra/output/. Both src/mastra/ and
 identically in both contexts.
 
 ## MCP server setup
-The Python MCP server must be installed before starting the agent:
+After adding new Python dependencies, reinstall before starting the agent:
 ```
 cd packages/mcp-server
 uv sync   # or: uv sync --no-binary :all:  (on WSL1 with low memory)
@@ -42,11 +58,13 @@ uv sync   # or: uv sync --no-binary :all:  (on WSL1 with low memory)
 MP_API_KEY must be set in packages/agent/.env — it is passed to the Python
 process by the MCPClient in mcp.ts.
 
-## Next session: end-to-end tests
+## Next session: end-to-end tests (still pending)
 1. uv run mame-mcp  (in packages/mcp-server) — should hang on stdin, no errors
 2. pnpm dev:agent   — should reach "ready" at localhost:4111
 3. In the Mastra playground ask: "What is the band gap of TiO2?"
    Expected: agent calls search_materials then get_electronic_properties
+4. Ask: "Give me an FHI-aims SCF input for Fe2O3 with GGA+U"
+   Expected: agent calls get_script("aims-scf") and web_search for U values
 
 ## Remote
 https://github.com/glleopart/MAME-Agent (public)
