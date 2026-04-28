@@ -1,0 +1,49 @@
+&CONTROL
+  calculation   = 'relax'        ! fixed-cell geometry optimization
+  restart_mode  = 'from_scratch'
+  prefix        = 'pwscf'
+  outdir        = './out'
+  pseudo_dir    = './pseudo'
+  forc_conv_thr = 1.0e-4         ! force convergence threshold (Ry/Bohr)
+/
+
+&SYSTEM
+  ibrav         = 0
+  nat           = 6
+  ntyp          = 2
+  ecutwfc       = 60
+  ecutrho       = 480
+  occupations   = 'smearing'
+  smearing      = 'mv'
+  degauss       = 0.01
+/
+
+&ELECTRONS
+  conv_thr        = 1.0e-8
+  mixing_beta     = 0.4
+/
+
+&IONS
+  ion_dynamics  = 'bfgs'         ! BFGS quasi-Newton — robust for most cases
+  ! ion_dynamics = 'damp'        ! damped dynamics (alternative)
+/
+
+ATOMIC_SPECIES
+   Ti  47.867  Ti.pbesol-spn-kjpaw_psl.1.0.0.UPF
+   O   15.999  O.pbesol-n-kjpaw_psl.0.1.UPF
+
+CELL_PARAMETERS angstrom
+   4.594000   0.000000   0.000000
+   0.000000   4.594000   0.000000
+   0.000000   0.000000   2.958000
+
+ATOMIC_POSITIONS crystal
+   Ti   0.000000  0.000000  0.000000
+   Ti   0.500000  0.500000  0.500000
+   O    0.305000  0.305000  0.000000
+   O    0.695000  0.695000  0.000000
+   O    0.195000  0.805000  0.500000
+   O    0.805000  0.195000  0.500000
+
+K_POINTS automatic
+   6 6 6   0 0 0

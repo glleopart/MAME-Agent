@@ -1,0 +1,43 @@
+#==============================================================
+# FHI-aims control.in — Band structure template
+# Run AFTER a converged SCF calculation (reads the SCF density).
+# Functional: GGA-PBE | Basis: tight
+#==============================================================
+
+xc                 pbe
+relativistic       atomic_zora regular
+spin               none
+k_grid             6 6 6         # same k-grid as SCF
+
+sc_accuracy_rho    1e-5
+sc_accuracy_eev    1e-3
+sc_accuracy_etot   1e-6
+sc_iter_limit      200
+
+mixer              pulay
+n_max_pulay        10
+charge_mix_param   0.2
+
+# --- Band structure output ---
+# Syntax: output band  kx_start ky_start kz_start
+#                      kx_end   ky_end   kz_end
+#                      n_points  label_start  label_end
+#
+# High-symmetry k-path depends on the Bravais lattice.
+# Use seekpath (https://tools.materialscloud.org/seekpath) or
+# AFLOW (aflow.org) to determine the correct path for your structure.
+#
+# Example below: tetragonal Brillouin zone (rutile TiO2, D4h)
+output band   0.0  0.0  0.0    0.5  0.5  0.0    50   Gamma  M
+output band   0.5  0.5  0.0    0.5  0.5  0.5    50   M      A
+output band   0.5  0.5  0.5    0.0  0.0  0.5    50   A      Z
+output band   0.0  0.0  0.5    0.0  0.0  0.0    50   Z      Gamma
+output band   0.0  0.0  0.0    0.5  0.0  0.0    50   Gamma  X
+output band   0.5  0.0  0.0    0.5  0.5  0.0    50   X      M
+
+# --- Optional: output Mulliken-projected bands ---
+# output band_mulliken  0.0 0.0 0.0  0.5 0.5 0.0  50  Gamma  M
+
+################################################################################
+# Append species blocks from $AIMS_HOME/species_defaults/tight/
+################################################################################

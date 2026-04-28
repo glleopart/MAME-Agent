@@ -1,0 +1,14 @@
+# FHI-aims geometry.in — relaxation starting structure
+# Example: TiO2 rutile (mp-2657)
+# Use get_structure to obtain the MP-relaxed structure as a starting point.
+
+lattice_vector   4.594000   0.000000   0.000000
+lattice_vector   0.000000   4.594000   0.000000
+lattice_vector   0.000000   0.000000   2.958000
+
+atom_frac   0.000000   0.000000   0.000000   Ti
+atom_frac   0.500000   0.500000   0.500000   Ti
+atom_frac   0.305000   0.305000   0.000000   O
+atom_frac   0.695000   0.695000   0.000000   O
+atom_frac   0.195000   0.805000   0.500000   O
+atom_frac   0.805000   0.195000   0.500000   O

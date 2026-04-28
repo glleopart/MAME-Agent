@@ -1,0 +1,8 @@
+&DOS
+  prefix  = 'pwscf'             ! must match the completed NSCF run
+  outdir  = './out'
+  fildos  = 'pwscf.dos'         ! output filename
+  Emin    = -20.0               ! min energy relative to Fermi level (eV)
+  Emax    =  10.0               ! max energy relative to Fermi level (eV)
+  DeltaE  =  0.01               ! energy step (eV)
+/

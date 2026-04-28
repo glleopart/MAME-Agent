@@ -1,0 +1,53 @@
+#==============================================================
+# FHI-aims control.in — SCF (single-point) template
+# Functional: GGA-PBE | Basis: tight
+# Example material: TiO2 rutile (mp-2657)
+#==============================================================
+
+# --- Exchange-correlation functional ---
+xc                 pbe
+# xc               pbe0          # hybrid — requires two-electron integrals
+# xc               hse06         # range-separated hybrid (gap-corrected)
+
+# --- GGA+U (Hubbard correction for correlated d/f electrons) ---
+# Uncomment and tune U values per element (literature or linear-response)
+# plus_u_use_matrix       .false.
+# plus_u_petukhov_mixing  1.0
+# In the corresponding species block add:
+#   hubbard_l   2        # l=2 → d electrons; l=3 → f electrons
+#   hubbard_u   X.X      # U in eV (e.g. Fe: 4.0, Ni: 6.0, Co: 3.3, Ti: 3.0)
+
+# --- Spin ---
+spin               none
+# spin             collinear     # for magnetic systems
+# default_initial_moment  0.0   # global fallback; override per atom in geometry.in
+
+# --- Relativistic correction ---
+relativistic       atomic_zora regular   # scalar ZORA — recommended for all elements
+
+# --- k-grid (Monkhorst-Pack) ---
+# Rule of thumb: k_i ≈ 2π / (a_i × 0.20 Å⁻¹); converge vs. total energy
+k_grid             6 6 6
+
+# --- SCF convergence thresholds ---
+sc_accuracy_rho    1e-5          # density (electrons/Bohr^3)
+sc_accuracy_eev    1e-3          # sum of eigenvalues (eV)
+sc_accuracy_etot   1e-6          # total energy (eV)
+sc_iter_limit      200
+
+# --- Density mixing ---
+mixer              pulay
+n_max_pulay        10
+charge_mix_param   0.2
+
+# --- Output ---
+output             mulliken      # Mulliken population analysis
+# output           cube total_density     # charge density (CUBE file)
+# output           hirshfeld              # Hirshfeld charge partitioning
+
+################################################################################
+# Append species (basis set) blocks below.
+# Copy from $AIMS_HOME/species_defaults/tight/  (or light for quick tests)
+# e.g.:  cat $AIMS_HOME/species_defaults/tight/22_Ti_default >> control.in
+#        cat $AIMS_HOME/species_defaults/tight/08_O_default  >> control.in
+################################################################################

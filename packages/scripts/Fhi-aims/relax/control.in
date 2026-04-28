@@ -1,0 +1,40 @@
+#==============================================================
+# FHI-aims control.in — Geometry relaxation template
+# Functional: GGA-PBE | Basis: tight
+# Relaxes both atomic positions AND unit cell (full vc-relax).
+# Change relax_unit_cell to "none" for fixed-cell relaxation.
+#==============================================================
+
+xc                 pbe
+relativistic       atomic_zora regular
+spin               none
+k_grid             6 6 6
+
+# --- SCF convergence ---
+sc_accuracy_rho    1e-5
+sc_accuracy_eev    1e-3
+sc_accuracy_etot   1e-6
+sc_iter_limit      200
+
+mixer              pulay
+n_max_pulay        10
+charge_mix_param   0.2
+
+# --- Forces (required for relaxation) ---
+compute_forces     .true.
+
+# --- Geometry optimization ---
+relax_geometry     bfgs  1e-2       # force convergence threshold (eV/Å)
+relax_unit_cell    full             # full: relax shape + volume
+# relax_unit_cell  shape            # fixed volume, relax shape
+# relax_unit_cell  none             # fixed cell, relax atoms only
+max_relaxation_steps  200
+
+# --- GGA+U (optional — uncomment to enable) ---
+# plus_u_use_matrix       .false.
+# plus_u_petukhov_mixing  1.0
+# (add hubbard_l / hubbard_u lines in each species block)
+
+################################################################################
+# Append species blocks from $AIMS_HOME/species_defaults/tight/
+################################################################################

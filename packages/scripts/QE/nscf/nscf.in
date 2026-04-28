@@ -1,0 +1,44 @@
+&CONTROL
+  calculation   = 'nscf'
+  restart_mode  = 'from_scratch'
+  prefix        = 'pwscf'        ! must match the completed SCF run
+  outdir        = './out'        ! must match the completed SCF run
+  pseudo_dir    = './pseudo'
+/
+
+&SYSTEM
+  ibrav         = 0
+  nat           = 6
+  ntyp          = 2
+  ecutwfc       = 60
+  ecutrho       = 480
+  occupations   = 'tetrahedra'   ! tetrahedra for DOS; use 'smearing' for band structure
+  nbnd          = 40             ! number of bands; increase for unoccupied states/DOS tail
+/
+
+&ELECTRONS
+  conv_thr        = 1.0e-10      ! tighter than SCF — nscf reads fixed density
+  diagonalization = 'david'
+/
+
+ATOMIC_SPECIES
+   Ti  47.867  Ti.pbesol-spn-kjpaw_psl.1.0.0.UPF
+   O   15.999  O.pbesol-n-kjpaw_psl.0.1.UPF
+
+CELL_PARAMETERS angstrom
+   4.594000   0.000000   0.000000
+   0.000000   4.594000   0.000000
+   0.000000   0.000000   2.958000
+
+ATOMIC_POSITIONS crystal
+   Ti   0.000000  0.000000  0.000000
+   Ti   0.500000  0.500000  0.500000
+   O    0.305000  0.305000  0.000000
+   O    0.695000  0.695000  0.000000
+   O    0.195000  0.805000  0.500000
+   O    0.805000  0.195000  0.500000
+
+K_POINTS automatic
+   12 12 12   0 0 0
+!  Use 2–3× the SCF k-grid for accurate DOS.
+!  For band structure, switch K_POINTS to 'crystal' and provide explicit k-path.

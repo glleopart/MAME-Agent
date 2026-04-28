@@ -1,0 +1,65 @@
+&CONTROL
+  calculation   = 'scf'
+  restart_mode  = 'from_scratch'
+  prefix        = 'pwscf'
+  outdir        = './out'
+  pseudo_dir    = './pseudo'
+  verbosity     = 'high'
+/
+
+&SYSTEM
+  ibrav         = 0              ! use explicit CELL_PARAMETERS (recommended over ibrav≠0)
+  nat           = 6              ! number of atoms — update to match ATOMIC_POSITIONS
+  ntyp          = 2              ! number of species — update to match ATOMIC_SPECIES
+  ecutwfc       = 60             ! wavefunction cutoff (Ry); converge for each pseudopotential
+  ecutrho       = 480            ! charge density cutoff (Ry); 4–8 × ecutwfc for US/PAW
+  occupations   = 'smearing'     ! use 'fixed' for insulators, 'smearing' for metals
+  smearing      = 'mv'           ! Methfessel-Paxton; alternatives: 'gauss', 'fd'
+  degauss       = 0.01           ! smearing width (Ry); ~0.001–0.02 Ry typical
+
+  ! GGA+U (DFT+U, Dudarev scheme — only one U-J parameter per species)
+  ! lda_plus_u      = .true.
+  ! lda_plus_u_kind = 0          ! 0 = simplified Dudarev (U_eff = U - J)
+  ! Hubbard_U(1)    = 3.0        ! U in eV for species 1 (e.g. Ti d-states)
+  ! Hubbard_J0(1)   = 0.0        ! J in eV (often set to 0)
+  ! Hubbard_l(1)    = 2          ! angular momentum: 2 = d, 3 = f
+  ! (Literature U values: Fe 4.0 eV, Ni 6.0 eV, Co 3.3 eV, Mn 4.0 eV, Ti 3.0 eV)
+
+  ! Spin-polarized calculation
+  ! nspin                 = 2
+  ! starting_magnetization(1) = 0.5   ! for species 1 (range -1 to +1)
+/
+
+&ELECTRONS
+  conv_thr        = 1.0e-8       ! SCF convergence (Ry); tighten to 1e-10 for forces
+  mixing_mode     = 'plain'      ! 'plain' or 'local-TF' (better for metals)
+  mixing_beta     = 0.4          ! mixing parameter; reduce (0.1–0.2) if SCF unstable
+  diagonalization = 'david'      ! 'david' (default) or 'cg'
+/
+
+ATOMIC_SPECIES
+!  Element  Mass(amu)  Pseudopotential_filename
+   Ti       47.867     Ti.pbesol-spn-kjpaw_psl.1.0.0.UPF
+   O        15.999     O.pbesol-n-kjpaw_psl.0.1.UPF
+!  Download SSSP Efficiency or Precision pseudopotentials from:
+!  https://pseudopotentials.quantum-espresso.org/sssp
+
+CELL_PARAMETERS angstrom
+!  Replace with actual lattice vectors (use get_structure MCP tool)
+   4.594000   0.000000   0.000000
+   0.000000   4.594000   0.000000
+   0.000000   0.000000   2.958000
+
+ATOMIC_POSITIONS crystal
+!  Element  x(frac)  y(frac)  z(frac)
+!  Example: TiO2 rutile (mp-2657) — replace with target material
+   Ti       0.000000  0.000000  0.000000
+   Ti       0.500000  0.500000  0.500000
+   O        0.305000  0.305000  0.000000
+   O        0.695000  0.695000  0.000000
+   O        0.195000  0.805000  0.500000
+   O        0.805000  0.195000  0.500000
+
+K_POINTS automatic
+   6 6 6   0 0 0
+!  Convergence criterion: total energy change < 1 meV/atom with k-grid increase
