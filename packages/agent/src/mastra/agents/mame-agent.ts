@@ -8,7 +8,7 @@ export const mameAgent = new Agent({
   description: "AI assistant for computational materials science at the nanoscale",
   model: "opencode-go/kimi-k2.5",
   memory,
-  tools: await mcpClient.getTools(),
+  tools: await mcpClient.listTools(),
   instructions: `You are MAME (MAterials for ME), an AI assistant specialized in computational materials science at the nanoscale.
 
 Your expertise covers:

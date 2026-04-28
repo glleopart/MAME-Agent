@@ -1,3 +1,5 @@
 packages:
   - "packages/agent"
   - "packages/desktop"
+allowBuilds:
+  esbuild: true
