@@ -1,6 +1,6 @@
 import { Agent } from "@mastra/core/agent";
 import { memory } from "../memory";
-import { mcpClient } from "../mcp";
+import { listToolsFixed } from "../mcp";
 
 export const mameAgent = new Agent({
   id: "mame-agent",
@@ -8,7 +8,22 @@ export const mameAgent = new Agent({
   description: "AI assistant for computational materials science at the nanoscale",
   model: "opencode-go/kimi-k2.5",
   memory,
-  tools: await mcpClient.listTools(),
+  tools: await listToolsFixed(),
+  // Kimi K2.5 on Moonshot AI has extended thinking enabled by default.
+  // When Mastra reconstructs conversation history after tool calls it drops
+  // reasoning_content, which causes Moonshot to reject the next request with
+  // "thinking is enabled but reasoning_content is missing".
+  // Setting reasoningEffort: "none" sends reasoning_effort: "none" to the
+  // OpenCode/Moonshot API so thinking is disabled for the whole session.
+  //
+  // @ts-ignore — providerOptions is accepted by the Agent constructor at
+  // runtime (stored at this.providerOptions, forwarded to every generate call)
+  // but the AgentConfig TypeScript type doesn't declare it yet.
+  providerOptions: {
+    "openai-compatible": {
+      reasoningEffort: "none",
+    },
+  },
   instructions: `You are MAME (MAterials for ME), an AI assistant specialized in computational materials science at the nanoscale.
 
 Your expertise covers:
