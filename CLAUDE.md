@@ -58,7 +58,17 @@ uv sync   # or: uv sync --no-binary :all:  (on WSL1 with low memory)
 MP_API_KEY must be set in packages/agent/.env — it is passed to the Python
 process by the MCPClient in mcp.ts.
 
+## WSL1 SQLite WAL issue (known)
+In WSL1, LibSQLStore sets PRAGMA journal_mode=WAL which creates mame.db-shm and
+mame.db-wal files. After an unclean shutdown, stale WAL files cause
+SQLITE_PROTOCOL: locking protocol on the /api/memory/threads endpoint, which
+makes the Mastra playground show a blank chatbox (chat interface fails to load).
+
+Fix: delete the stale files before starting the server:
+  rm packages/agent/data/mame.db-shm packages/agent/data/mame.db-wal
+
 ## Next session: end-to-end tests (still pending)
+Wait ~20 seconds for full startup (Python/MCP server cold start on WSL1).
 1. uv run mame-mcp  (in packages/mcp-server) — should hang on stdin, no errors
 2. pnpm dev:agent   — should reach "ready" at localhost:4111
 3. In the Mastra playground ask: "What is the band gap of TiO2?"
