@@ -12,6 +12,7 @@ export const mcpClient = new MCPClient({
       args: ["run", "mame-mcp"],
       cwd: mcpServerPath,
       env: {
+        ...process.env,
         MP_API_KEY: process.env.MP_API_KEY ?? "",
       },
     },

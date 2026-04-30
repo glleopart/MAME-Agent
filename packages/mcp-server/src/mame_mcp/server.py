@@ -37,9 +37,8 @@ def search_materials(formula: str, num_results: int = 10) -> list[dict]:
                 "band_gap",
                 "is_stable",
                 "energy_above_hull",
-                "crystal_system",
-                "space_group",
                 "nsites",
+                "symmetry",
             ],
         )
         return [r.model_dump(mode="json") for r in results[:num_results]]
