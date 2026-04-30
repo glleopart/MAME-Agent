@@ -67,14 +67,46 @@ makes the Mastra playground show a blank chatbox (chat interface fails to load).
 Fix: delete the stale files before starting the server:
   rm packages/agent/data/mame.db-shm packages/agent/data/mame.db-wal
 
-## Next session: end-to-end tests (still pending)
-Wait ~20 seconds for full startup (Python/MCP server cold start on WSL1).
-1. uv run mame-mcp  (in packages/mcp-server) — should hang on stdin, no errors
-2. pnpm dev:agent   — should reach "ready" at localhost:4111
-3. In the Mastra playground ask: "What is the band gap of TiO2?"
-   Expected: agent calls search_materials then get_electronic_properties
-4. Ask: "Give me an FHI-aims SCF input for Fe2O3 with GGA+U"
-   Expected: agent calls get_script("aims-scf") and web_search for U values
+## Session startup checklist
+1. Check for stale WAL files (blank chatbox symptom):
+     ls packages/agent/data/   # if .db-shm or .db-wal exist, delete them
+2. Start MCP server sanity check (optional):
+     cd packages/mcp-server && uv run mame-mcp   # should hang on stdin
+3. Start agent (wait ~20s on WSL1 for Python/MCP cold start):
+     pnpm dev:agent   # → "Studio available at http://localhost:4111"
+
+## Next steps (in order)
+
+### Step 1 — End-to-end validation (Phase 4, first priority)
+Run these conversations in the Mastra playground to confirm tools fire correctly:
+- "What is the band gap of TiO2?"
+  Expected tool calls: search_materials → get_electronic_properties
+- "Give me an FHI-aims SCF input for Fe2O3 with GGA+U"
+  Expected tool calls: get_script("aims-scf") + web_search for U values
+- "Show me the density of states of mp-1234"
+  Expected tool calls: get_dos
+If Kimi K2.5 is still silent after tool calls, switch model to "opencode-go/qwen3.5-plus".
+
+### Step 2 — Agent quality tuning
+- Refine system prompt: add explicit tool-use examples and output formatting rules
+- Test multi-step workflow: relax → SCF → NSCF → DOS sequence
+- Add error handling guidance (what to say when MP has no data for a material)
+
+### Step 3 — More MCP tools (Phase 5)
+Priority additions to packages/mcp-server/src/mame_mcp/server.py:
+- get_band_structure — fetch band structure + suggest k-path (use mp-api + seekpath)
+- compare_materials — compare properties of two material IDs side by side
+- search_by_elements — search MP by element list (not just formula)
+
+### Step 4 — Script library completions
+Remaining placeholders in packages/scripts/: plotting + analysis templates
+- qe-pdos — projected DOS plot (gnuplot/matplotlib)
+- aims-cube — electron density cube file export
+- qe-phonon — basic phonon calculation (ph.x)
+
+### Step 5 — Electron desktop app (Phase 7)
+Scaffold packages/desktop/ with Electron + React, embed the Mastra agent via HTTP
+(localhost:4111 API). The desktop app replaces the Mastra playground as the UI.
 
 ## Remote
 https://github.com/glleopart/MAME-Agent (public)
