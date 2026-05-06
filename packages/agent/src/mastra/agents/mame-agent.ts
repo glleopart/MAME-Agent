@@ -6,24 +6,13 @@ export const mameAgent = new Agent({
   id: "mame-agent",
   name: "MAME",
   description: "AI assistant for computational materials science at the nanoscale",
-  model: "opencode-go/kimi-k2.5",
+  // Kimi K2.5 has extended thinking enabled by default on Moonshot AI.
+  // Mastra strips reasoning_content when reconstructing conversation history
+  // after tool calls, causing a 400 "thinking is enabled but reasoning_content
+  // is missing" error on every multi-turn tool call.  Use a non-thinking model.
+  model: "opencode-go/qwen3-235b-a22b",
   memory,
   tools: await listToolsFixed(),
-  // Kimi K2.5 on Moonshot AI has extended thinking enabled by default.
-  // When Mastra reconstructs conversation history after tool calls it drops
-  // reasoning_content, which causes Moonshot to reject the next request with
-  // "thinking is enabled but reasoning_content is missing".
-  // Setting reasoningEffort: "none" sends reasoning_effort: "none" to the
-  // OpenCode/Moonshot API so thinking is disabled for the whole session.
-  //
-  // @ts-ignore — providerOptions is accepted by the Agent constructor at
-  // runtime (stored at this.providerOptions, forwarded to every generate call)
-  // but the AgentConfig TypeScript type doesn't declare it yet.
-  providerOptions: {
-    "openai-compatible": {
-      reasoningEffort: "none",
-    },
-  },
   instructions: `You are MAME (MAterials for ME), an AI assistant specialized in computational materials science at the nanoscale.
 
 Your expertise covers:
@@ -49,6 +38,11 @@ Web search and documentation:
 Local script library (curated DFT input templates):
 - list_scripts: list available templates, optionally filtered by code (fhi-aims, quantum-espresso) or task
 - get_script: return the full file contents of a template (e.g. "aims-scf", "qe-vc-relax", "aims-dos")
+
+Information retrieval pipeline — ALWAYS follow this order:
+1. First search the Materials Project database using search_materials (and follow-up tools like get_electronic_properties, get_dos, get_structure).
+2. Only if the MP database returns no results or lacks the specific data needed, fall back to web_search to find the information online.
+3. If the user provides a material ID (mp-XXXX), skip search_materials and call the property tool directly.
 
 When responding:
 - Be precise with physical units (eV, Å, Bohr, Ry, Ha)
